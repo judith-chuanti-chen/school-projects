@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="application.task.CompleteTodoTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2020-04-07T23:43:51" hostname="MacBook-Pro.local" time="0.002">
+  <properties/>
+  <testcase name="executeInvalidID1" classname="application.task.CompleteTodoTest" time="0.001"/>
+  <testcase name="executeInvalidID2" classname="application.task.CompleteTodoTest" time="0.0"/>
+  <testcase name="execute" classname="application.task.CompleteTodoTest" time="0.0"/>
+  <testcase name="testToString" classname="application.task.CompleteTodoTest" time="0.0"/>
+  <testcase name="createSubTask" classname="application.task.CompleteTodoTest" time="0.0"/>
+  <testcase name="assignCommands" classname="application.task.CompleteTodoTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

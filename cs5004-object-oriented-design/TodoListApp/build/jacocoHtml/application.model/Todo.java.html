@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Todo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.model</a> &gt; <span class="el_source">Todo.java</span></div><h1>Todo.java</h1><pre class="source lang-java linenums">package application.model;
+
+import java.time.LocalDate;
+import java.util.Objects;
+
+/**
+ * Represents a single to-do
+ */
+public class Todo {
+
+    /**
+     * ID of a Todo
+      */
+    private Integer id;
+    /**
+     * Text description of a Todo
+     */
+    private String text;
+    /**
+     * Status of completion of a Todo
+     */
+    private Boolean completed;
+    /**
+     * Due date of a Todo
+     */
+    private LocalDate due;
+    /**
+     * Priority of a Todo
+     */
+    private Integer priority;
+    /**
+     * Category of a Todo
+     */
+    private String category;
+
+    /**
+     * Represents the default value of each field in Todo
+     */
+<span class="fc" id="L39">    public static final Integer HIGHEST_PRIORITY = 3;</span>
+<span class="fc" id="L40">    public static final Integer LOWEST_PRIORITY = 1;</span>
+    public static final String DEFAULT_DATE_FORMAT = &quot;M/dd/yyyy&quot;;
+    public static final String NULL_VALUE = &quot;?&quot;;
+<span class="fc" id="L43">    public static final Integer DEFAULT_ID = null;</span>
+<span class="fc" id="L44">    public static final String DEFAULT_TEXT = null;</span>
+<span class="fc" id="L45">    public static final Boolean DEFAULT_COMPLETED = false;</span>
+<span class="fc" id="L46">    public static final LocalDate DEFAULT_DUE_DATE = null;</span>
+<span class="fc" id="L47">    public static final Integer DEFAULT_PRIORITY = null;</span>
+<span class="fc" id="L48">    public static final String DEFAULT_CATEGORY = null;</span>
+
+    /**
+     * Constructs a new Todo
+     * @param id Todo's ID
+     * @param text Todo's text description
+     * @param completed Todo's completion status
+     * @param due Todo's due date
+     * @param priority Todo's priority
+     * @param category Todo's category
+     */
+<span class="fc" id="L59">    public Todo(Integer id, String text, Boolean completed, LocalDate due, Integer priority, String category) {</span>
+<span class="fc" id="L60">        this.id = id;</span>
+<span class="fc" id="L61">        this.text = text;</span>
+<span class="fc" id="L62">        this.completed = completed;</span>
+<span class="fc" id="L63">        this.due = due;</span>
+<span class="fc" id="L64">        this.priority = priority;</span>
+<span class="fc" id="L65">        this.category = category;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Gets Todo's ID
+     * @return todo's ID
+     */
+    public Integer getId() {
+<span class="fc" id="L73">        return this.id;</span>
+    }
+
+    /**
+     * Gets Todo's text description
+     * @return todo's text description
+     */
+    public String getText() {
+<span class="fc" id="L81">        return this.text;</span>
+    }
+
+    /**
+     * Gets Todo's completion status
+     * @return Todo's completion status
+     */
+    public Boolean getCompleted() {
+<span class="fc" id="L89">        return this.completed;</span>
+    }
+
+    /**
+     * Gets Todo's due date
+     * @return Todo's due date
+     */
+    public LocalDate getDue() {
+<span class="fc" id="L97">        return this.due;</span>
+    }
+
+    /**
+     * Gets Todo's priority
+     * @return Todo's priority
+     */
+    public Integer getPriority() {
+<span class="fc" id="L105">        return this.priority;</span>
+    }
+
+    /**
+     * Gets Todo's category
+     * @return Todo's category
+     */
+    public String getCategory() {
+<span class="fc" id="L113">        return this.category;</span>
+    }
+
+    /**
+     * Sets a Todo to completed
+     */
+    public void setCompleted() {
+<span class="fc" id="L120">        this.completed = true;</span>
+<span class="fc" id="L121">    }</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L126">            return true;</span>
+        }
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (!(o instanceof Todo)) {</span>
+<span class="fc" id="L129">            return false;</span>
+        }
+<span class="fc" id="L131">        Todo todo = (Todo) o;</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        return Objects.equals(getId(), todo.getId()) &amp;&amp;</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            Objects.equals(getText(), todo.getText()) &amp;&amp;</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            Objects.equals(getCompleted(), todo.getCompleted()) &amp;&amp;</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            Objects.equals(getDue(), todo.getDue()) &amp;&amp;</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">            Objects.equals(getPriority(), todo.getPriority()) &amp;&amp;</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            Objects.equals(getCategory(), todo.getCategory());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L142">        return Objects</span>
+<span class="fc" id="L143">            .hash(getId(), getText(), getCompleted(), getDue(), getPriority(), getCategory());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L148">        return &quot;Todo{&quot; +</span>
+            &quot;id=&quot; + id +
+            &quot;, text='&quot; + text + '\'' +
+            &quot;, completed=&quot; + completed +
+            &quot;, due=&quot; + due +
+            &quot;, priority=&quot; + priority +
+            &quot;, category='&quot; + category + '\'' +
+            '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

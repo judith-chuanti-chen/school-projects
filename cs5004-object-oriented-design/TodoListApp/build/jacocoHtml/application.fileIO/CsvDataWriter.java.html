@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CsvDataWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.fileIO</a> &gt; <span class="el_source">CsvDataWriter.java</span></div><h1>CsvDataWriter.java</h1><pre class="source lang-java linenums">package application.fileIO;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+import java.util.regex.Pattern;
+
+/**
+ * Represents a CSV data writer which writes the information to CSV file
+ */
+public class CsvDataWriter implements IDataWriter{
+<span class="fc" id="L13">    private static final Pattern WRAPPER = Pattern.compile(&quot;\&quot;&quot;);</span>
+<span class="fc" id="L14">    private static final Pattern SEPARATOR = Pattern.compile(&quot;,&quot;);</span>
+
+    /**
+     * Constructs a CSVDataWriter
+     */
+<span class="fc" id="L19">    public CsvDataWriter() {</span>
+<span class="fc" id="L20">    }</span>
+
+    /**
+     * Write information to csv file
+     * @param path csv file location
+     * @param contents the contents that we need to write to the file
+     * @throws Exception IOEexception
+     */
+    @Override
+    public void write(String path,  List&lt;List&lt;String&gt;&gt; contents) throws Exception{
+<span class="fc" id="L30">        try(BufferedWriter outputFile = new BufferedWriter(new FileWriter(path))){</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            for (int i = 0; i &lt; contents.size() - 1 ; i++) {</span>
+<span class="fc" id="L32">                outputFile.write( convert(contents.get(i)) + System.lineSeparator());</span>
+            }
+<span class="fc" id="L34">            outputFile.write(convert(contents.get(contents.size()-1)));</span>
+<span class="nc" id="L35">        }catch (IOException ioe){</span>
+<span class="nc" id="L36">            throw new IOException(&quot;Something went wrong while writing the file: &quot; + path + ioe.getMessage());</span>
+<span class="fc" id="L37">        }</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Convert List of String to String
+     * @param stringList List of String
+     * @return String
+     */
+    private String convert(List&lt;String&gt; stringList){
+<span class="fc" id="L46">        String result = null;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for(String s: stringList){</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            if (result == null){</span>
+<span class="fc" id="L49">                result = &quot;&quot;;</span>
+            }
+            else{
+<span class="fc" id="L52">                result += SEPARATOR;</span>
+            }
+<span class="fc" id="L54">            result += WRAPPER + s + WRAPPER;</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc" id="L56">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

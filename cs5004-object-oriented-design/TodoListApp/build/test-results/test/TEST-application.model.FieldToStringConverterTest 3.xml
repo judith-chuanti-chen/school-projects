@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="application.model.FieldToStringConverterTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-04-07T20:51:28" hostname="MacBook-Pro.local" time="0.001">
+  <properties/>
+  <testcase name="processTodo" classname="application.model.FieldToStringConverterTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="application.task.DisplayTodoTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2020-04-07T20:51:28" hostname="MacBook-Pro.local" time="0.026">
+  <properties/>
+  <testcase name="createSubTaskFailed" classname="application.task.DisplayTodoTest" time="0.0"/>
+  <testcase name="testToString" classname="application.task.DisplayTodoTest" time="0.001"/>
+  <testcase name="assignCommands" classname="application.task.DisplayTodoTest" time="0.001"/>
+  <testcase name="testHashCode" classname="application.task.DisplayTodoTest" time="0.0"/>
+  <testcase name="executeDisplayTodo" classname="application.task.DisplayTodoTest" time="0.003"/>
+  <testcase name="executeDisplayTodo2" classname="application.task.DisplayTodoTest" time="0.003"/>
+  <testcase name="executeDisplayTodo3" classname="application.task.DisplayTodoTest" time="0.002"/>
+  <testcase name="executeDisplayTodo4" classname="application.task.DisplayTodoTest" time="0.0"/>
+  <testcase name="executeDisplayTodo5" classname="application.task.DisplayTodoTest" time="0.006"/>
+  <testcase name="executeDisplayTodo6" classname="application.task.DisplayTodoTest" time="0.003"/>
+  <testcase name="executeDisplayTodo7" classname="application.task.DisplayTodoTest" time="0.0"/>
+  <testcase name="assignCommandsNoRequired" classname="application.task.DisplayTodoTest" time="0.001"/>
+  <testcase name="testEquals" classname="application.task.DisplayTodoTest" time="0.0"/>
+  <system-out><![CDATA[id   text                                              completed      due            priority       category                      
+1    Cleaning                                          false          ?              ?              Work                          
+2    Cleaning                                          false          ?              ?              Work                          
+id   text                                              completed      due            priority       category                      
+1    Cleaning                                          false          ?              ?              Work                          
+2    Cleaning                                          false          ?              ?              Work                          
+id   text                                              completed      due            priority       category                      
+1    Cleaning                                          false          ?              ?              Work                          
+2    Cleaning                                          false          ?              ?              Work                          
+id   text                                              completed      due            priority       category                      
+1    Cleaning                                          false          ?              ?              Work                          
+2    Cleaning                                          false          ?              ?              Work                          
+id   text                                              completed      due            priority       category                      
+1    Cleaning                                          false          ?              ?              Work                          
+2    Cleaning                                          false          ?              ?              Work                          
+No todo satisfies these conditions.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

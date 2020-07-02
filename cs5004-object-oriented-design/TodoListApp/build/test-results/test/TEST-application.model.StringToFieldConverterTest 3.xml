@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="application.model.StringToFieldConverterTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2020-04-07T20:51:28" hostname="MacBook-Pro.local" time="0.01">
+  <properties/>
+  <testcase name="processInvalidId" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processInvalidDueDate" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processCompleted" classname="application.model.StringToFieldConverterTest" time="0.001"/>
+  <testcase name="processId" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="testCheckEmptyField" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processText" classname="application.model.StringToFieldConverterTest" time="0.001"/>
+  <testcase name="processTodo" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="testCheckEmptyFieldNull" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processPriority" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processInvalidPriority1" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processInvalidPriority2" classname="application.model.StringToFieldConverterTest" time="0.001"/>
+  <testcase name="processInvalidPriority3" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processInvalidText" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processInvalidTodo" classname="application.model.StringToFieldConverterTest" time="0.001"/>
+  <testcase name="processInvalidCompleted" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <testcase name="processCategory" classname="application.model.StringToFieldConverterTest" time="0.001"/>
+  <testcase name="processDueDate" classname="application.model.StringToFieldConverterTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

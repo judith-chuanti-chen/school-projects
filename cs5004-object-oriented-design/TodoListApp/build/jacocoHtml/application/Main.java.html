@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package application;
+
+import application.command.CommandLineOption;
+import application.command.CommandLineParser;
+import application.model.UserSetting;
+import application.model.UserSetting.TaskType;
+import application.task.TaskCoordinator;
+
+import application.view.ViewUsage;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L13">public class Main {</span>
+    public static void main(String[] args){
+        try {
+//            args = new String[]{&quot;--csv-file&quot;, &quot;todos.csv&quot;, &quot;--add-todo&quot;,&quot;--todo-text&quot;,&quot;write&quot;, &quot;letter&quot;, &quot;to&quot;, &quot;Jane&quot;,
+//            &quot;and&quot;, &quot;call&quot;, &quot;Bob&quot;,
+//            &quot;--priority&quot;, &quot;2&quot;, &quot;--category&quot;, &quot;personal&quot;, &quot;--display&quot;, &quot;--sort-by-date&quot;, &quot;--show-incomplete&quot;};
+//            args = new String[]{&quot;--csv-file&quot;, &quot;todos.csv&quot;, &quot;--display&quot;, &quot;--sort-by-date&quot;, &quot;--sort-by-priority&quot; , &quot;--complete-todo&quot;, &quot;1&quot;};
+//            args = new String[]{&quot;--csv-file&quot;, &quot;todos.csv&quot;, &quot;--display&quot;,  &quot;--sort-by-date&quot; , &quot;--complete-todo&quot;, &quot;1&quot;};
+<span class="nc" id="L21">            CommandLineParser parser = new CommandLineParser(args, UserSetting.getRequiredTasks(), UserSetting.getCommandSettings());</span>
+<span class="nc" id="L22">            Map&lt;TaskType, List&lt;CommandLineOption&gt;&gt; collectedCommands = parser.parse();</span>
+<span class="nc" id="L23">            TaskCoordinator tc = new TaskCoordinator(UserSetting.getTaskPriority(), collectedCommands, UserSetting.getRequiredSubForEachMain());</span>
+<span class="nc" id="L24">            tc.execute();</span>
+<span class="nc" id="L25">        } catch (Exception e){</span>
+<span class="nc" id="L26">            System.out.println(&quot;Wrong input... &quot; + e.getMessage());</span>
+<span class="nc" id="L27">            ViewUsage.viewAllUsage();</span>
+<span class="nc" id="L28">            ViewUsage.viewExample();</span>
+<span class="nc" id="L29">        }</span>
+<span class="nc" id="L30">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

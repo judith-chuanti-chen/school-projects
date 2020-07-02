@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="application.task.TaskCoordinatorTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2020-04-07T23:43:51" hostname="MacBook-Pro.local" time="0.03">
+  <properties/>
+  <testcase name="execute" classname="application.task.TaskCoordinatorTest" time="0.006"/>
+  <testcase name="testToString" classname="application.task.TaskCoordinatorTest" time="0.001"/>
+  <testcase name="executeAll" classname="application.task.TaskCoordinatorTest" time="0.022"/>
+  <testcase name="testHashCode" classname="application.task.TaskCoordinatorTest" time="0.0"/>
+  <testcase name="testEquals" classname="application.task.TaskCoordinatorTest" time="0.001"/>
+  <system-out><![CDATA[id   text                                              completed      due            priority       category                      
+1    Finish HW9                                        true           3/22/2020      1              school                        
+2    Mail passport                                     true           12/28/2020     ?              ?                             
+3    Study for finals                                  false          ?              2              school                        
+4    Clean the house                                   false          3/22/2020      3              home                          
+5    Buy yarn for blanket, stuffed toy                 true           ?              ?              home                          
+6    finish                                            false          ?              ?              ?                             
+7    finish                                            false          ?              ?              ?                             
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

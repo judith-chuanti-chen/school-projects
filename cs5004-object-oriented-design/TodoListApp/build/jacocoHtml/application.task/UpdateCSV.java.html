@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UpdateCSV.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.task</a> &gt; <span class="el_source">UpdateCSV.java</span></div><h1>UpdateCSV.java</h1><pre class="source lang-java linenums">package application.task;
+
+import application.command.CommandLineOption;
+import application.fileIO.CsvDataWriter;
+import application.model.FieldToStringConverter;
+import application.model.ITodoList;
+import application.model.Todo;
+import application.model.UserSetting;
+import java.util.*;
+
+/**
+ * Represents a UpdateCSV class that extends AbstractMainTask
+ */
+public class UpdateCSV extends AbstractMainTask {
+    /**
+     * The path of file to be written
+     */
+    private String path;
+
+
+    /**
+     * Constructs a new UpdateCSV
+     * @param name name of the MainTask
+     * @param order Order of this MainTask to be executed
+     * @param todoList TodoList to be modified
+     * @param commands Commands assigned to this MainTask
+     * @param requiredSubTasks Required SubTasks for this MainTask
+     * @param path the path of file to be written
+     */
+    public UpdateCSV(UserSetting.TaskType name, int order, ITodoList todoList, List&lt;CommandLineOption&gt; commands, Set&lt;UserSetting.TaskType&gt; requiredSubTasks, String path) {
+<span class="fc" id="L31">        super(name, order, todoList, commands, requiredSubTasks);</span>
+<span class="fc" id="L32">        this.path = path;</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Assign commands to each SubTask and push SubTask into a TaskList for execution
+     */
+    @Override
+    public void assignCommands() {
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Assigns commands to SubTasks, verifies all required SubTasks and executes all SubTasks
+     * @throws Exception throws if an error occurs when executing
+     */
+    @Override
+    public void execute() throws Exception {
+<span class="fc" id="L48">        CsvDataWriter writer = new CsvDataWriter();</span>
+<span class="fc" id="L49">        List&lt;List&lt;String&gt;&gt; stringContent = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L50">        stringContent.add(convertHeaders(todoList.getHeader()));</span>
+        Todo todo;
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (int i = 0; i &lt; todoList.size(); i++) {</span>
+<span class="fc" id="L53">            todo = todoList.getTodo(i);</span>
+<span class="fc" id="L54">            stringContent.add(FieldToStringConverter.processTodo(todo));</span>
+        }
+<span class="fc" id="L56">        writer.write(path, stringContent);</span>
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * A helper method to convert headers to List of Strings
+     * @param headers the header of the todoList
+     * @return a List of Strings
+     */
+    private List&lt;String&gt; convertHeaders(Map&lt;String, Integer&gt; headers){
+<span class="fc" id="L65">        String[] res = new String[headers.size()];</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(String h : headers.keySet()){</span>
+<span class="fc" id="L67">            res[headers.get(h)] = h;</span>
+<span class="fc" id="L68">        }</span>
+<span class="fc" id="L69">        return Arrays.asList(res);</span>
+    }
+
+    /**
+     * No subtask is needed to be created for the UpdateCSV class
+     * @param c CommandLineOption given
+     * @return null
+     */
+    @Override
+    public AbstractSubTask createSubTask(CommandLineOption c) {
+<span class="fc" id="L79">        return null;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="fc bfc" id="L85" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (!super.equals(o)) return false;</span>
+<span class="fc" id="L87">        UpdateCSV updateCSV = (UpdateCSV) o;</span>
+<span class="fc" id="L88">        return Objects.equals(path, updateCSV.path);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L93">        return Objects.hash(super.hashCode(), path);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L98">        return &quot;UpdateCSV{&quot; +</span>
+                &quot;path='&quot; + path + '\'' +
+<span class="fc" id="L100">                &quot;} &quot; + super.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

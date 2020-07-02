@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommandLineParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.command</a> &gt; <span class="el_source">CommandLineParser.java</span></div><h1>CommandLineParser.java</h1><pre class="source lang-java linenums">package application.command;
+import application.model.UserSetting.TaskType;
+
+import java.util.*;
+
+/**
+ * Represents a CommandLineParser
+ */
+public class CommandLineParser {
+
+    private String[] args;
+    private Map&lt;String, CommandLineOption&gt; commandSettings;
+    private Set&lt;String&gt; keywords;
+    private Set&lt;TaskType&gt; requiredTasks;
+<span class="fc" id="L15">    private static int i = 0;</span>
+
+    /**
+     * Constructor of specified commands
+     * @param args String[] args to extract info from command line
+     * @param requiredTasks Hashmap to store the requiredTasks
+     * @param commandSettings Hashmap to store commandSettings, the key is the String, and value is CommandLineOption object
+     */
+<span class="fc" id="L23">    public CommandLineParser(String[] args, Set&lt;TaskType&gt; requiredTasks, Map&lt;String, CommandLineOption&gt; commandSettings) {</span>
+<span class="fc" id="L24">        this.args = args;</span>
+<span class="fc" id="L25">        this.requiredTasks = requiredTasks;</span>
+<span class="fc" id="L26">        this.commandSettings = commandSettings;</span>
+<span class="fc" id="L27">        this.keywords = this.commandSettings.keySet();</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Parse the user's input info
+     * @return Hashmap with TaskType and list of CommandLineOption object
+     * @throws InvalidCommandException if it doesn't contain info in keywords
+     */
+    public Map&lt;TaskType, List&lt;CommandLineOption&gt;&gt; parse() throws InvalidCommandException {
+<span class="fc" id="L36">        Map&lt;TaskType, List&lt;CommandLineOption&gt;&gt; res = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        while (i &lt; this.args.length){</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            if(!this.keywords.contains(this.args[i])){</span>
+<span class="fc" id="L39">                throw new InvalidCommandException(&quot;Must provide a command before providing arguments.&quot;); // Or &quot;Unknown command&quot;</span>
+            }
+
+<span class="fc" id="L42">            CommandLineOption option = this.commandSettings.get(this.args[i++]);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">            if(option.hasSubArgs()){</span>
+<span class="fc" id="L44">                List&lt;String&gt; arguments = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L45">                arguments = this.getSubArguments(option);</span>
+<span class="fc" id="L46">                option.setArgs(arguments);</span>
+            }
+<span class="fc" id="L48">            res.putIfAbsent(option.getMainTask(), new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L49">            res.get(option.getMainTask()).add(option);</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">        verifyAllRequiredTasks(res);</span>
+<span class="fc" id="L52">        return res;</span>
+    }
+
+    /**
+     * Helper method to check the subArgument
+     * @param option CommandLineOption Object
+     * @return List of String Arguments
+     * @throws InvalidCommandException throw an exception if the arguments are empty
+     */
+    private List&lt;String&gt; getSubArguments(CommandLineOption option) throws InvalidCommandException {
+<span class="fc" id="L62">        List&lt;String&gt; arguments = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L63" title="1 of 4 branches missed.">        while (i &lt; this.args.length &amp;&amp; !this.keywords.contains(this.args[i])) { arguments.add(this.args[i++]); }</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (arguments.isEmpty()){throw new InvalidCommandException(&quot;Missing the argument of &quot; + option.getMainTask().keyword());}</span>
+<span class="fc" id="L65">        return arguments;</span>
+    }
+
+    /**
+     * Helper method to verifyAllRequiredTasks
+     * @param result Hashmap to store the TaskType and list of CommandLineOption Object
+     * @throws InvalidCommandException throw an exception if missing required tasks
+     */
+    private void verifyAllRequiredTasks(Map&lt;TaskType, List&lt;CommandLineOption&gt;&gt; result) throws InvalidCommandException {
+<span class="fc" id="L74">        Set&lt;TaskType&gt; collectedTasks = result.keySet();</span>
+<span class="fc" id="L75">        this.requiredTasks.removeAll(collectedTasks);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if(!this.requiredTasks.isEmpty()){</span>
+<span class="fc" id="L77">            String missingCommands = &quot;&quot;;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">            for(TaskType e: this.requiredTasks){</span>
+<span class="fc" id="L79">                missingCommands += e.keyword() + &quot; &quot;;</span>
+<span class="fc" id="L80">            }</span>
+<span class="fc" id="L81">            throw new InvalidCommandException(&quot;Missing &quot; + missingCommands + &quot;command&quot;);</span>
+        }
+<span class="fc" id="L83">    }</span>
+
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

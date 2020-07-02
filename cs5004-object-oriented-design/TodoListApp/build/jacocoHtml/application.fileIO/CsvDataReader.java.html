@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CsvDataReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.fileIO</a> &gt; <span class="el_source">CsvDataReader.java</span></div><h1>CsvDataReader.java</h1><pre class="source lang-java linenums">package application.fileIO;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Represents a CSV data reader which reads the CSV file and extracts the tags and information
+ */
+public class CsvDataReader implements IDataReader{
+
+    private static final String PATTERN = &quot;\&quot;([^\&quot;]*)\&quot;&quot;;
+    private List&lt;String&gt; header;
+    private List&lt;List&lt;String&gt;&gt; contents;
+
+    /**
+     * Constructs a CSVDataReader
+     */
+<span class="fc" id="L24">    public CsvDataReader() {</span>
+<span class="fc" id="L25">        this.header = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L26">        this.contents = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Read the file and extract information in tags and info
+     * @param path the file location that we want to read
+     * @throws Exception throw exception if the file doesn't end up with &quot;.csv&quot; or cannot find the file
+     */
+    @Override
+    public void read(String path) throws Exception{
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (!path.endsWith(&quot;.csv&quot;)){</span>
+<span class="fc" id="L37">            throw new IllegalArgumentException(path + &quot; is not a csv file.&quot;);</span>
+        }
+<span class="fc" id="L39">        try (BufferedReader inputFile = new BufferedReader(new FileReader(path))) {</span>
+            String line;
+<span class="fc" id="L41">            line = inputFile.readLine();</span>
+<span class="fc" id="L42">            this.header = this.convert(line);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            while ((line = inputFile.readLine()) != null) {</span>
+<span class="fc" id="L44">                this.contents.add(this.convert(line));</span>
+            }
+<span class="fc" id="L46">        } catch (FileNotFoundException fnfe) {</span>
+<span class="fc" id="L47">            throw new FileNotFoundException(&quot;OOPS! A file was not found&quot;);</span>
+<span class="nc" id="L48">        } catch (IOException ioe) {</span>
+<span class="nc" id="L49">            throw new IOException(&quot;Something went wrong!&quot;);</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Convert each row into a List
+     * @param row each line in file
+     * @return the content of the file
+     * @throws IllegalArgumentException if row is null throw an exception
+     */
+    private List&lt;String&gt; convert(String row) throws IllegalArgumentException{
+
+<span class="fc" id="L61">        List&lt;String&gt; content = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L62">        Pattern pattern = Pattern.compile(PATTERN);</span>
+<span class="fc" id="L63">        Matcher m = pattern.matcher(row);</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        while (m.find()) {</span>
+<span class="fc" id="L65">            content.add(m.group(1));</span>
+        }
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if(content.size() == 0){</span>
+<span class="nc" id="L68">            throw new IllegalArgumentException(&quot;a line of content doesn't match CSV format.&quot;);</span>
+        }
+<span class="fc" id="L70">        return content;</span>
+    }
+
+    /**
+     * Get header of the file
+     * @return header
+     */
+    public List&lt;String&gt; getHeader() {
+<span class="fc" id="L78">        return header;</span>
+    }
+
+    /**
+     * Get contents of the file
+     * @return content
+     */
+    public List&lt;List&lt;String&gt;&gt; getContents() {
+<span class="fc" id="L86">        return contents;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

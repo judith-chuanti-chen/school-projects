@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="application.command.CommandLineOptionTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2020-04-07T20:51:28" hostname="MacBook-Pro.local" time="0.004">
+  <properties/>
+  <testcase name="noSubArgs" classname="application.command.CommandLineOptionTest" time="0.0"/>
+  <testcase name="testToString" classname="application.command.CommandLineOptionTest" time="0.0"/>
+  <testcase name="getArgs" classname="application.command.CommandLineOptionTest" time="0.0"/>
+  <testcase name="getName" classname="application.command.CommandLineOptionTest" time="0.0"/>
+  <testcase name="testHashCode" classname="application.command.CommandLineOptionTest" time="0.001"/>
+  <testcase name="validateMaxArgs" classname="application.command.CommandLineOptionTest" time="0.0"/>
+  <testcase name="validateMinArgs" classname="application.command.CommandLineOptionTest" time="0.001"/>
+  <testcase name="testEquals" classname="application.command.CommandLineOptionTest" time="0.0"/>
+  <testcase name="setArgs" classname="application.command.CommandLineOptionTest" time="0.0"/>
+  <testcase name="getMainTask" classname="application.command.CommandLineOptionTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

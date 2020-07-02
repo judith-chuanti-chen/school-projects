@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskCoordinator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.task</a> &gt; <span class="el_source">TaskCoordinator.java</span></div><h1>TaskCoordinator.java</h1><pre class="source lang-java linenums">package application.task;
+
+import application.command.CommandLineOption;
+import application.command.InvalidCommandException;
+import application.model.ITodoList;
+import application.model.TodoList;
+import application.model.UserSetting;
+import application.model.UserSetting.TaskType;
+
+import application.view.ViewUsage;
+import java.util.*;
+
+/**
+ * Represents the task coordinator, which takes collected commands and assigns commands to tasks.
+ */
+public class TaskCoordinator {
+    private Map&lt;TaskType, Set&lt;TaskType&gt;&gt; requiredSubForEachMain;
+    private Map&lt;TaskType, Integer&gt; taskPriority;
+    private ITodoList todoList;
+    private Map&lt;TaskType, List&lt;CommandLineOption&gt;&gt; collectedCommands;
+<span class="fc" id="L21">    private Queue&lt;AbstractMainTask&gt; taskList = new PriorityQueue&lt;&gt;((a , b) -&gt; a.order - b.order);</span>
+    private String CSVpath;
+
+    /**
+     * The constructor of task coordinator.
+     * @param taskPriority the execution priority of main tasks, given as a mapping of Tasktype and Integer
+     * @param collectedCommands the collected commands, given as a mapping of Tasktype and a list of CommandLineOption objects
+     * @param requiredSubForEachMain the required (sub)tasks for each main tasks, given as a mapping of Tasktype and a set of Tasktypes
+     */
+    public TaskCoordinator(Map&lt;TaskType, Integer&gt; taskPriority,
+                           Map&lt;TaskType, List&lt;CommandLineOption&gt;&gt; collectedCommands,
+<span class="fc" id="L32">                           Map&lt;TaskType, Set&lt;TaskType&gt;&gt; requiredSubForEachMain) {</span>
+<span class="fc" id="L33">        this.todoList = TodoList.createTodoList();</span>
+<span class="fc" id="L34">        this.taskPriority = taskPriority;</span>
+<span class="fc" id="L35">        this.requiredSubForEachMain = requiredSubForEachMain;</span>
+<span class="fc" id="L36">        this.collectedCommands = collectedCommands;</span>
+<span class="fc" id="L37">        this.CSVpath = null;</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * The main execute method of task coordinator.
+     * @throws Exception if the assignment of tasks failed
+     */
+    public void execute() throws Exception{
+<span class="fc" id="L45">        this.assignCommandsToTask();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        while(!this.taskList.isEmpty()){</span>
+<span class="fc" id="L47">            AbstractMainTask t = taskList.poll();</span>
+            try{
+<span class="fc" id="L49">                t.execute();</span>
+<span class="nc" id="L50">            }catch(Exception e){</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                if(t.name.equals(TaskType.READ_CSV)){</span>
+<span class="nc" id="L52">                    throw new IllegalArgumentException(&quot;Failed to read CSV file due to &quot; + e.getMessage());</span>
+                }
+                else {
+<span class="nc" id="L55">                    System.out.println(&quot;Failed to perform task &quot; + t.name + &quot; due to &quot; + e.getMessage());</span>
+<span class="nc" id="L56">                    ViewUsage.view(UserSetting.getMainUsage(t.name));</span>
+                }
+<span class="fc" id="L58">            }</span>
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * A helper method to assign commands to tasks
+     * @throws InvalidCommandException if any error happens when assigning commands
+     */
+    private void assignCommandsToTask() throws InvalidCommandException {
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for (TaskType e : collectedCommands.keySet()) {</span>
+<span class="fc" id="L68">            AbstractMainTask t = this.createTask(e);</span>
+<span class="fc" id="L69">            taskList.offer(t);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if (t.name.equals(TaskType.READ_CSV)) {</span>
+<span class="fc" id="L71">                this.CSVpath = t.commands.get(0).getArgs().get(0);</span>
+<span class="fc" id="L72">                AbstractMainTask update = this.createTask(TaskType.WRITE_CSV);</span>
+<span class="fc" id="L73">                taskList.offer(update);</span>
+            }
+<span class="fc" id="L75">        }</span>
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * A helper method to create main tasks
+     * @param e the given Tasktype
+     * @return a task as an AbstractMainTask
+     * @throws InvalidCommandException if an unknown task is given.
+     */
+    private AbstractMainTask createTask(TaskType e) throws InvalidCommandException{
+<span class="pc bpc" id="L85" title="1 of 6 branches missed.">        switch(e){</span>
+<span class="fc" id="L86">            case READ_CSV: return new ReadCSV(e, taskPriority.get(e), todoList, this.collectedCommands.get(e), requiredSubForEachMain.get(e));</span>
+<span class="fc" id="L87">            case ADD_TODO: return new AddNewTodo(e, taskPriority.get(e), todoList, this.collectedCommands.get(e), requiredSubForEachMain.get(e));</span>
+<span class="fc" id="L88">            case COMPLETE_TODO: return new CompleteTodo(e, taskPriority.get(e), todoList, this.collectedCommands.get(e), requiredSubForEachMain.get(e));</span>
+<span class="fc" id="L89">            case DISPLAY: return new DisplayTodo(e, taskPriority.get(e), todoList, this.collectedCommands.get(e), requiredSubForEachMain.get(e));</span>
+<span class="fc" id="L90">            case WRITE_CSV: return new UpdateCSV(e, taskPriority.get(e), todoList, this.collectedCommands.get(e), requiredSubForEachMain.get(e), this.CSVpath);</span>
+            default:
+<span class="nc" id="L92">                throw new InvalidCommandException(&quot;Unknown task.&quot;);</span>
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="fc bfc" id="L99" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L100">        TaskCoordinator that = (TaskCoordinator) o;</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        return Objects.equals(requiredSubForEachMain, that.requiredSubForEachMain) &amp;&amp;</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            Objects.equals(taskPriority, that.taskPriority) &amp;&amp;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            Objects.equals(todoList, that.todoList) &amp;&amp;</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            Objects.equals(collectedCommands, that.collectedCommands) &amp;&amp;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">            Objects.equals(CSVpath, that.CSVpath) &amp;&amp;</span>
+<span class="pc bnc" id="L106" title="All 2 branches missed.">            Objects.equals(taskList, that.taskList);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L111">        return Objects</span>
+<span class="fc" id="L112">            .hash(requiredSubForEachMain, taskPriority, todoList, collectedCommands, taskList,</span>
+                CSVpath);
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L118">        return &quot;TaskCoordinator{&quot; +</span>
+            &quot;requiredSubForEachMain=&quot; + requiredSubForEachMain +
+            &quot;, taskPriority=&quot; + taskPriority +
+            &quot;, todoList=&quot; + todoList +
+            &quot;, collectedCommands=&quot; + collectedCommands +
+            &quot;, taskList=&quot; + taskList +
+            &quot;, CSVpath='&quot; + CSVpath + '\'' +
+            '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="application.fileIO.CsvDataReaderTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2020-04-07T20:51:27" hostname="MacBook-Pro.local" time="0.006">
+  <properties/>
+  <testcase name="read" classname="application.fileIO.CsvDataReaderTest" time="0.004"/>
+  <testcase name="fileNotFound" classname="application.fileIO.CsvDataReaderTest" time="0.001"/>
+  <testcase name="getHeader" classname="application.fileIO.CsvDataReaderTest" time="0.001"/>
+  <testcase name="getContents" classname="application.fileIO.CsvDataReaderTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

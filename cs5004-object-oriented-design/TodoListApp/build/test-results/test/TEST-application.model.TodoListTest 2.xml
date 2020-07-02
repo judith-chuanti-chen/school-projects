@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="application.model.TodoListTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2020-04-07T20:51:28" hostname="MacBook-Pro.local" time="0.003">
+  <properties/>
+  <testcase name="addTodo" classname="application.model.TodoListTest" time="0.0"/>
+  <testcase name="testToString" classname="application.model.TodoListTest" time="0.0"/>
+  <testcase name="createTodoList" classname="application.model.TodoListTest" time="0.0"/>
+  <testcase name="getTodo" classname="application.model.TodoListTest" time="0.0"/>
+  <testcase name="size" classname="application.model.TodoListTest" time="0.0"/>
+  <testcase name="getHeader" classname="application.model.TodoListTest" time="0.001"/>
+  <testcase name="getTodoList" classname="application.model.TodoListTest" time="0.0"/>
+  <testcase name="testHashCode" classname="application.model.TodoListTest" time="0.0"/>
+  <testcase name="testEquals" classname="application.model.TodoListTest" time="0.0"/>
+  <testcase name="setTodo" classname="application.model.TodoListTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

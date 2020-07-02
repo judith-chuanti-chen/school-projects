@@ -1,0 +1,24 @@
+&(ƒid   text                                              completed      due            priority       category                      
+&(ƒ1    Finish HW9                                        true           3/22/2020      1              school                        
+&(ƒ2    Mail passport                                     true           12/28/2020     ?              ?                             
+&(ƒ3    Study for finals                                  false          ?              2              school                        
+&(ƒ4    Clean the house                                   false          3/22/2020      3              home                          
+&(ƒ5    Buy yarn for blanket, stuffed toy                 true           ?              ?              home                          
+&(ƒ6    finish                                            false          ?              ?              ?                             
+&(ƒ7    finish                                            false          ?              ?              ?                             
+37ƒid   text                                              completed      due            priority       category                      
+37ƒ1    Cleaning                                          false          ?              ?              Work                          
+37ƒ2    Cleaning                                          false          ?              ?              Work                          
+38ƒid   text                                              completed      due            priority       category                      
+38ƒ1    Cleaning                                          false          ?              ?              Work                          
+38ƒ2    Cleaning                                          false          ?              ?              Work                          
+39ƒid   text                                              completed      due            priority       category                      
+39ƒ1    Cleaning                                          false          ?              ?              Work                          
+39ƒ2    Cleaning                                          false          ?              ?              Work                          
+3;ƒid   text                                              completed      due            priority       category                      
+3;ƒ1    Cleaning                                          false          ?              ?              Work                          
+3;ƒ2    Cleaning                                          false          ?              ?              Work                          
+3<ƒid   text                                              completed      due            priority       category                      
+3<ƒ1    Cleaning                                          false          ?              ?              Work                          
+3<ƒ2    Cleaning                                          false          ?              ?              Work                          
+3=$No todo satisfies these conditions.

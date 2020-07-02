@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TodoList.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.model</a> &gt; <span class="el_source">TodoList.java</span></div><h1>TodoList.java</h1><pre class="source lang-java linenums">package application.model;
+
+import java.util.*;
+
+/**
+ * Represents a TodoList class
+ */
+public class TodoList implements ITodoList, Iterable&lt;Todo&gt; {
+    /**
+     * Header collected from CSV
+     */
+    protected Map&lt;String, Integer &gt; header;
+    /**
+     * List of Todos
+     */
+    protected List&lt;Todo&gt; todos;
+    /**
+     * Instance for the use of Singleton Pattern
+     */
+    private static TodoList instance;
+
+    /**
+     * Constructs a new TodoList
+     */
+<span class="fc" id="L25">    private TodoList() {</span>
+<span class="fc" id="L26">        this.header = UserSetting.DEFAULT_HEADERS;</span>
+<span class="fc" id="L27">        this.todos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Creates a new TodoList if it hasn't been created one yet, otherwise return the existing TodoList
+     * @return the Singleton todoList object
+     */
+    public static TodoList createTodoList(){
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if(instance == null){ return new TodoList(); }</span>
+<span class="nc" id="L36">        return instance;</span>
+    }
+
+    /**
+     * Adds a new Todo
+     * @param todo new todo to be added
+     * @throws Exception thrown when there is an error with adding todo
+     */
+    @Override
+    public void addTodo(Todo todo) throws Exception{
+<span class="fc" id="L46">        this.todos.add(todo);</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Retrieve a todo in TodoList with index
+     * @param index the index of the todo to be retrieved
+     * @return the todo to be retrieved
+     * @throws Exception thrown when there is an error with retrieving todo
+     */
+    @Override
+    public Todo getTodo(int index) throws Exception {
+<span class="fc" id="L57">        return this.todos.get(index);</span>
+    }
+
+    /**
+     * Replaces an existing todo in TodoList with an new todo
+     * @param index the index of the existing todo
+     * @param todo the new todo to be inserted
+     * @throws Exception thrown when there is an error setting todo
+     */
+    @Override
+    public void setTodo(int index, Todo todo) throws Exception {
+<span class="fc" id="L68">        this.todos.set(index, todo);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Returns the size of TodoList
+     * @return the number of todos in TodoList
+     */
+    @Override
+    public int size() {
+<span class="fc" id="L77">        return this.todos.size();</span>
+    }
+
+    /**
+     * Retrieves the header of the TodoList
+     * @return the header of the TodoList
+     */
+    @Override
+    public Map&lt;String, Integer&gt; getHeader() {
+<span class="fc" id="L86">        return this.header;</span>
+    }
+
+    /**
+     * Retrieves all todos stored in TodoList
+     * @return a list of todos stored in TodoList
+     */
+    @Override
+    public List&lt;Todo&gt; getTodoList() {
+<span class="fc" id="L95">        return this.todos;</span>
+    }
+
+    /**
+     * Returns the Iterator of this TodoList
+     * @return the Iterator of an ArrayList of Todos
+     */
+    @Override
+    public Iterator&lt;Todo&gt; iterator() {
+<span class="nc" id="L104">        return this.todos.iterator();</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="fc bfc" id="L110" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L111">        TodoList todos1 = (TodoList) o;</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        return Objects.equals(getHeader(), todos1.getHeader()) &amp;&amp;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">                Objects.equals(todos, todos1.todos);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L118">        return Objects.hash(getHeader(), todos);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L123">        return &quot;TodoList{&quot; +</span>
+                &quot;header=&quot; + header +
+                &quot;, todos=&quot; + todos +
+                '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

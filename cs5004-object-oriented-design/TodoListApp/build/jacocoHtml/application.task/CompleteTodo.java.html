@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompleteTodo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.task</a> &gt; <span class="el_source">CompleteTodo.java</span></div><h1>CompleteTodo.java</h1><pre class="source lang-java linenums">package application.task;
+
+import application.command.CommandLineOption;
+import application.command.InvalidCommandException;
+import application.model.ITodoList;
+import application.model.InvalidTodoException;
+import application.model.UserSetting.TaskType;
+
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Represents a CompleteTodo class that extends AbstractMainTask
+ */
+public class CompleteTodo extends AbstractMainTask {
+
+    /**
+     * Constructs a new CompleteTodo
+     * @param name name of the MainTask
+     * @param order Order of this MainTask to be executed
+     * @param todoList TodoList to be modified
+     * @param commands Commands assigned to this MainTask
+     * @param requiredSubTasks Required SubTasks for this MainTask
+     */
+    public CompleteTodo(TaskType name, int order, ITodoList todoList, List&lt;CommandLineOption&gt; commands, Set&lt;TaskType&gt; requiredSubTasks) {
+<span class="fc" id="L26">        super(name, order, todoList, commands, requiredSubTasks);</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Assign commands to each SubTask and push SubTask into a TaskList for execution
+     * @throws InvalidCommandException thrown if an error occurs when assigning commands
+     */
+    @Override
+    public void assignCommands() throws InvalidCommandException {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        for (CommandLineOption c : this.commands){</span>
+<span class="fc" id="L36">            AbstractSubTask sub = createSubTask(c);</span>
+<span class="fc" id="L37">            this.collectedSubTasks.add(sub);</span>
+<span class="fc" id="L38">        }</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Assigns commands to SubTasks, verifies all required SubTasks and executes all SubTasks
+     * @throws Exception throws if an error occurs when executing
+     */
+    @Override
+    public void execute() throws Exception {
+<span class="fc" id="L47">        this.assignCommands();</span>
+<span class="fc" id="L48">        super.verifyRequiredSubTask();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(AbstractSubTask t : this.collectedSubTasks){ t.execute(); }</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Creates and returns a SubTask given a CommandLineOption
+     * @param c CommandLineOption given
+     * @return a SubTask
+     * @throws InvalidCommandException thrown if an error occurs when creating SubTask
+     */
+    @Override
+    public AbstractSubTask createSubTask(CommandLineOption c) throws InvalidCommandException {
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        switch(c.getName()){</span>
+<span class="fc" id="L61">            case COMPLETE_TODO: return new CompleteTodo.CompleteSingleTodo(c.getName(), c.getArgs());</span>
+            default:
+<span class="nc" id="L63">                throw new InvalidCommandException(&quot;Unknown command: &quot; + c.getName());</span>
+        }
+    }
+
+    /**
+     * Represents a CompleteSingleTodo class that extends AbstractSubTask
+     */
+    private class CompleteSingleTodo extends AbstractSubTask{
+
+        /**
+         * Constructs CompleteSingleTodo
+         * @param name TaskType name
+         * @param args List&lt;String&gt; args
+         */
+<span class="fc" id="L77">        public CompleteSingleTodo(TaskType name, List&lt;String&gt; args) {</span>
+<span class="fc" id="L78">            super(name, args);</span>
+<span class="fc" id="L79">        }</span>
+
+        /**
+         * Execute CompleteSingleTodo
+         * @throws Exception thrown if an error occurs when executing CompleteSingleTodo
+         */
+        @Override
+        public void execute() throws Exception {
+            try {
+<span class="fc" id="L88">                todoList.getTodo(processIndex(args.get(0))).setCompleted();</span>
+<span class="fc" id="L89">            }catch (IndexOutOfBoundsException e){</span>
+<span class="fc" id="L90">                throw new InvalidTodoException(&quot;Can not find todo of id=&quot; + args.get(0));</span>
+<span class="fc" id="L91">            }</span>
+<span class="fc" id="L92">        }</span>
+
+        /**
+         * A helper method to convert string to integer for id
+         * @param index the index given as a String
+         * @return the index as a Integer
+         * @throws Exception if the string could not be process to the integer
+         */
+        private Integer processIndex(String index) throws Exception {
+            try{
+<span class="fc" id="L102">                return Integer.parseInt(index) - 1;</span>
+<span class="fc" id="L103">            }catch(NumberFormatException e){</span>
+<span class="fc" id="L104">                throw new NumberFormatException(&quot;Index of todo must be an integer&quot;);</span>
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L111">        return &quot;CompleteTodo{}&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

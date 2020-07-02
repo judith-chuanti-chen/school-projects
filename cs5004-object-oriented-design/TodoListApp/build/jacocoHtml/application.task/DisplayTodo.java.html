@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DisplayTodo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.task</a> &gt; <span class="el_source">DisplayTodo.java</span></div><h1>DisplayTodo.java</h1><pre class="source lang-java linenums">package application.task;
+
+import application.command.CommandLineOption;
+import application.command.InvalidCommandException;
+import application.model.*;
+import application.view.ViewTodo;
+
+import java.util.*;
+
+/**
+ * Represents DisplayTodo class
+ */
+public class DisplayTodo extends AbstractMainTask {
+    protected List&lt;Todo&gt; displayedTodoList;
+    private boolean hasSortByPriority;
+    private boolean hasSortByDate;
+
+    /**
+     * Construct DisplayTodo class
+     * @param name name of the MainTask
+     * @param order Order of this MainTask to be executed
+     * @param todoList TodoList to be modified
+     * @param commands Commands assigned to this MainTask
+     * @param requiredSubTasks Required SubTasks for this MainTask
+     */
+    public DisplayTodo(UserSetting.TaskType name, int order, ITodoList todoList, List&lt;CommandLineOption&gt; commands, Set&lt;UserSetting.TaskType&gt; requiredSubTasks) {
+<span class="fc" id="L27">        super(name, order, todoList, commands, requiredSubTasks);</span>
+<span class="fc" id="L28">        this.displayedTodoList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Assign commands to each SubTask and push SubTask into a TaskList for execution
+     * @throws InvalidCommandException thrown if an error occurs when assigning commands
+     */
+    @Override
+    public void assignCommands() throws InvalidCommandException {
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        for (CommandLineOption c : this.commands){</span>
+<span class="fc" id="L38">            AbstractSubTask sub = createSubTask(c);</span>
+<span class="fc" id="L39">            this.collectedSubTasks.add(sub);</span>
+<span class="fc" id="L40">        }</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * Assigns commands to SubTasks, verifies all required SubTasks and executes all SubTasks
+     * @throws Exception throws if an error occurs when executing
+     */
+    @Override
+    public void execute() throws Exception {
+<span class="fc" id="L49">        this.assignCommands();</span>
+<span class="fc" id="L50">        super.verifyRequiredSubTask();</span>
+<span class="fc" id="L51">        this.displayedTodoList = new ArrayList&lt;&gt;(todoList.getTodoList());</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for(AbstractSubTask t : this.collectedSubTasks){</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (t.name.equals(UserSetting.TaskType.SORT_BY_DATE))</span>
+<span class="fc" id="L54">                hasSortByDate = true;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (t.name.equals(UserSetting.TaskType.SORT_BY_PRIORITY))</span>
+<span class="fc" id="L56">                hasSortByPriority = true;</span>
+<span class="fc" id="L57">            t.execute();</span>
+<span class="fc" id="L58">        }</span>
+<span class="fc bfc" id="L59" title="All 4 branches covered.">        if (hasSortByDate &amp;&amp; hasSortByPriority)</span>
+<span class="fc" id="L60">            throw new InvalidCommandException(&quot;Sort by Date and Sort by priority cannot be executed at the same time&quot;);</span>
+<span class="fc" id="L61">        ViewTodo.view(this.displayedTodoList);</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * Creates and returns a SubTask given a CommandLineOption
+     * @param c CommandLineOption given
+     * @return a SubTask
+     * @throws InvalidCommandException thrown if an error occurs when creating SubTask
+     */
+    @Override
+    public AbstractSubTask createSubTask(CommandLineOption c) throws InvalidCommandException {
+<span class="fc bfc" id="L72" title="All 6 branches covered.">        switch(c.getName()){</span>
+<span class="fc" id="L73">            case DISPLAY: return new DisplayTodo.display(c.getName(), c.getArgs());</span>
+<span class="fc" id="L74">            case SHOW_INCOMPLETE: return new DisplayTodo.ShowIncomplete(c.getName(), c.getArgs());</span>
+<span class="fc" id="L75">            case SHOW_CATEGORY: return new DisplayTodo.ShowCategory(c.getName(), c.getArgs());</span>
+<span class="fc" id="L76">            case SORT_BY_DATE: return new DisplayTodo.SortByDate(c.getName(), c.getArgs());</span>
+<span class="fc" id="L77">            case SORT_BY_PRIORITY: return new DisplayTodo.SortByPriority(c.getName(), c.getArgs());</span>
+            default:
+<span class="fc" id="L79">                throw new InvalidCommandException(&quot;Unknown command: &quot; + c.getName());</span>
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L86">            return true;</span>
+        }
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (!(o instanceof DisplayTodo)) {</span>
+<span class="fc" id="L89">            return false;</span>
+        }
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (!super.equals(o)) {</span>
+<span class="fc" id="L92">            return false;</span>
+        }
+<span class="fc" id="L94">        DisplayTodo that = (DisplayTodo) o;</span>
+<span class="pc bpc" id="L95" title="2 of 4 branches missed.">        return hasSortByPriority == that.hasSortByPriority &amp;&amp;</span>
+            hasSortByDate == that.hasSortByDate &amp;&amp;
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">            Objects.equals(displayedTodoList, that.displayedTodoList);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L102">        return Objects.hash(super.hashCode(), displayedTodoList, hasSortByPriority, hasSortByDate);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L107">        return &quot;DisplayTodo{&quot; +</span>
+            &quot;displayedTodoList=&quot; + displayedTodoList +
+            &quot;, hasSortByPriority=&quot; + hasSortByPriority +
+            &quot;, hasSortByDate=&quot; + hasSortByDate +
+            '}';
+    }
+
+    /**
+     * Represents a display class that extends AbstractSubTask
+     */
+    protected class display extends AbstractSubTask {
+
+        /**
+         * Construct display
+         * @param name TaskType name
+         * @param args List of Strings for args
+         */
+<span class="fc" id="L124">        public display(UserSetting.TaskType name, List&lt;String&gt; args) {</span>
+<span class="fc" id="L125">            super(name, args);</span>
+<span class="fc" id="L126">        }</span>
+
+        /**
+         * No specific task need to be executed
+         */
+        @Override
+        public void execute(){
+<span class="fc" id="L133">        }</span>
+    }
+
+    /**
+     * Represents a ShowIncomplete class that extends AbstractSubTask
+     */
+    private class ShowIncomplete extends AbstractSubTask {
+
+
+        /**
+         * Construct ShowIncomplete
+         * @param name TaskType name
+         * @param args List&lt;String&gt; args
+         */
+<span class="fc" id="L147">        public ShowIncomplete(UserSetting.TaskType name, List&lt;String&gt; args) {</span>
+<span class="fc" id="L148">            super(name, args);</span>
+<span class="fc" id="L149">        }</span>
+
+        /**
+         * Override execute method, use TodoInCompleteIterator to filter the todoList
+         */
+        @Override
+        public void execute() throws Exception {
+<span class="fc" id="L156">            List&lt;Todo&gt; filter = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L157">            Iterator&lt;Todo&gt; it = new TodoIncompleteIterator(displayedTodoList);</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            while(it.hasNext()){</span>
+<span class="fc" id="L159">                Todo todo = it.next();</span>
+<span class="fc" id="L160">                filter.add(todo);</span>
+<span class="fc" id="L161">            }</span>
+<span class="fc" id="L162">            displayedTodoList = filter;</span>
+<span class="fc" id="L163">        }</span>
+    }
+
+    /**
+     * Represents a ShowCategory class that extends AbstractSubTask
+     */
+    private class ShowCategory extends AbstractSubTask {
+
+        /**
+         * Construct ShowCategory
+         * @param name TaskType name
+         * @param args List&lt;String&gt; args
+         */
+<span class="fc" id="L176">        public ShowCategory(UserSetting.TaskType name, List&lt;String&gt; args) {</span>
+<span class="fc" id="L177">            super(name, args);</span>
+<span class="fc" id="L178">        }</span>
+
+        /**
+         * Override execute method, use TodoCategoryIterator to filter the todoList
+         */
+        @Override
+        public void execute() throws Exception {
+<span class="fc" id="L185">            List&lt;Todo&gt; filter = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L186">            Iterator&lt;Todo&gt; it = new TodoCategoryIterator(displayedTodoList, args.get(0));</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">            while(it.hasNext()){</span>
+<span class="fc" id="L188">                Todo todo = it.next();</span>
+<span class="fc" id="L189">                filter.add(todo);</span>
+<span class="fc" id="L190">            }</span>
+<span class="fc" id="L191">            displayedTodoList = filter;</span>
+<span class="fc" id="L192">        }</span>
+    }
+
+    /**
+     * Represents a SortByDate class that extends AbstractSubTask
+     */
+    private class SortByDate extends AbstractSubTask {
+
+        /**
+         * Construct SortByDate
+         * @param name TaskType name
+         * @param args List&lt;String&gt; args
+         */
+<span class="fc" id="L205">        public SortByDate(UserSetting.TaskType name, List&lt;String&gt; args) {</span>
+<span class="fc" id="L206">            super(name, args);</span>
+<span class="fc" id="L207">        }</span>
+
+        /**
+         * Override execute method, sort the todoList with TodoDueDateComparator
+         */
+        @Override
+        public void execute() throws Exception {
+<span class="fc" id="L214">            Collections.sort(displayedTodoList, new TodoDueDateComparator());</span>
+<span class="fc" id="L215">        }</span>
+    }
+
+    /**
+     * Represents a SortByPriority class that extends AbstractSubTask
+     */
+    private class SortByPriority extends AbstractSubTask {
+
+        /**
+         * Construct SortByPriority
+         * @param name TaskType name
+         * @param args List&lt;String&gt; args
+         */
+<span class="fc" id="L228">        public SortByPriority(UserSetting.TaskType name, List&lt;String&gt; args) {</span>
+<span class="fc" id="L229">            super(name, args);</span>
+<span class="fc" id="L230">        }</span>
+
+        /**
+         * Override execute method, sort the todoList with TodoPriorityComparator
+         */
+        @Override
+        public void execute() throws Exception {
+<span class="fc" id="L237">            Collections.sort(displayedTodoList, new TodoPriorityComparator());</span>
+<span class="fc" id="L238">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    version="6.8.0" timestamp="2020-04-07T16:43:54.281">
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/command/CommandLineOptionTest.java">
+<violation beginline="73" endline="73" begincolumn="17" endcolumn="35" rule="EqualsNull" ruleset="Error Prone" package="application.command" class="CommandLineOptionTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/command/CommandLineParserTest.java">
+<violation beginline="46" endline="53" begincolumn="10" endcolumn="3" rule="MethodNamingConventions" ruleset="Code Style" package="application.command" class="CommandLineParserTest" method="InvalidCommandException" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_codestyle.html#methodnamingconventions" priority="1">
+The JUnit 4 test method name 'InvalidCommandException' doesn't match '[a-z][a-zA-Z0-9]*'
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/model/StringToFieldConverterTest.java">
+<violation beginline="21" endline="21" begincolumn="18" endcolumn="21" rule="FieldNamingConventions" ruleset="Code Style" package="application.model" class="StringToFieldConverterTest" variable="NULL" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_codestyle.html#fieldnamingconventions" priority="1">
+The final field name 'NULL' doesn't match '[a-z][a-zA-Z0-9]*'
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/model/TodoCategoryIteratorTest.java">
+<violation beginline="54" endline="54" begincolumn="17" endcolumn="45" rule="EqualsNull" ruleset="Error Prone" package="application.model" class="TodoCategoryIteratorTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/model/TodoIncompleteIteratorTest.java">
+<violation beginline="44" endline="44" begincolumn="17" endcolumn="47" rule="EqualsNull" ruleset="Error Prone" package="application.model" class="TodoIncompleteIteratorTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/model/TodoListTest.java">
+<violation beginline="70" endline="70" begincolumn="21" endcolumn="41" rule="EqualsNull" ruleset="Error Prone" package="application.model" class="TodoListTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/model/TodoTest.java">
+<violation beginline="67" endline="67" begincolumn="21" endcolumn="37" rule="EqualsNull" ruleset="Error Prone" package="application.model" class="TodoTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/task/AddNewTodoTest.java">
+<violation beginline="68" endline="83" begincolumn="10" endcolumn="3" rule="MethodNamingConventions" ruleset="Code Style" package="application.task" class="AddNewTodoTest" method="TodoText" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_codestyle.html#methodnamingconventions" priority="1">
+The JUnit 4 test method name 'TodoText' doesn't match '[a-z][a-zA-Z0-9]*'
+</violation>
+<violation beginline="173" endline="173" begincolumn="17" endcolumn="36" rule="EqualsNull" ruleset="Error Prone" package="application.task" class="AddNewTodoTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/task/DisplayTodoTest.java">
+<violation beginline="134" endline="134" begincolumn="21" endcolumn="43" rule="EqualsNull" ruleset="Error Prone" package="application.task" class="DisplayTodoTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/task/ReadCSVTest.java">
+<violation beginline="84" endline="84" begincolumn="21" endcolumn="40" rule="EqualsNull" ruleset="Error Prone" package="application.task" class="ReadCSVTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/task/TaskCoordinatorTest.java">
+<violation beginline="88" endline="88" begincolumn="17" endcolumn="40" rule="EqualsNull" ruleset="Error Prone" package="application.task" class="TaskCoordinatorTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+<file name="/Users/judy/Desktop/cs5004/Team_repo_Chia_Wei_Lin_Chuan_Ti_Chen_Jingjing_Liao/HW09/src/test/java/application/task/UpdateCSVTest.java">
+<violation beginline="61" endline="61" begincolumn="21" endcolumn="39" rule="EqualsNull" ruleset="Error Prone" package="application.task" class="UpdateCSVTest" method="testEquals" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#equalsnull" priority="1">
+Avoid using equals() to compare against null
+</violation>
+</file>
+</pmd>

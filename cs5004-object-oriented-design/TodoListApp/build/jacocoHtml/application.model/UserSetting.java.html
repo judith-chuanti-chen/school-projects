@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserSetting.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.model</a> &gt; <span class="el_source">UserSetting.java</span></div><h1>UserSetting.java</h1><pre class="source lang-java linenums">package application.model;
+
+import application.command.CommandLineOption;
+
+import java.lang.reflect.Array;
+import java.util.*;
+
+/**
+ * Store all user setting and tasks processing logic
+ * including command line options's keyword and settings,
+ *           required tasks for the application, required task for main tasks,
+ *           main tasks' priority,
+ *           default header for the csv file,
+ *           and the usage message.
+ */
+public class UserSetting {
+
+    private UserSetting(){}
+
+    /**
+     * Enum of task types, with a keyword method which could be used in CommandLineParser
+      */
+<span class="fc" id="L23">    public enum TaskType{</span>
+<span class="fc" id="L24">        READ_CSV(&quot;--csv-file&quot;),</span>
+<span class="fc" id="L25">        ADD_TODO(&quot;--add-todo&quot;),</span>
+<span class="fc" id="L26">        ADD_TODO_TEXT(&quot;--todo-text&quot;),</span>
+<span class="fc" id="L27">        COMPLETED(&quot;--completed&quot;),</span>
+<span class="fc" id="L28">        ADD_DUE(&quot;--due&quot;),</span>
+<span class="fc" id="L29">        ADD_PRIORITY(&quot;--priority&quot;),</span>
+<span class="fc" id="L30">        ADD_CATEGORY(&quot;--category&quot;),</span>
+<span class="fc" id="L31">        COMPLETE_TODO(&quot;--complete-todo&quot;),</span>
+<span class="fc" id="L32">        DISPLAY(&quot;--display&quot;),</span>
+<span class="fc" id="L33">        SHOW_INCOMPLETE(&quot;--show-incomplete&quot;),</span>
+<span class="fc" id="L34">        SHOW_CATEGORY(&quot;--show-category&quot;),</span>
+<span class="fc" id="L35">        SORT_BY_DATE(&quot;--sort-by-date&quot;),</span>
+<span class="fc" id="L36">        SORT_BY_PRIORITY(&quot;--sort-by-priority&quot;),</span>
+<span class="fc" id="L37">        WRITE_CSV(&quot;&quot;);</span>
+
+        private String keyword;
+<span class="fc" id="L40">        TaskType(String s){</span>
+<span class="fc" id="L41">            this.keyword = s;</span>
+<span class="fc" id="L42">        }</span>
+
+        /**
+         * return a task type's keyword
+         * @return a keyword as a string
+         */
+        public String keyword(){
+<span class="fc" id="L49">            return this.keyword;</span>
+        }
+    }
+
+    /**
+     * Maps between TaskType keywords and CommmandLineOption objects.
+     */
+<span class="fc" id="L56">    protected static final Map&lt;String, CommandLineOption&gt; commandSettings= new HashMap&lt;String, CommandLineOption&gt;(){</span>
+        {
+<span class="fc" id="L58">            put(TaskType.READ_CSV.keyword(), new CommandLineOption.Builder(TaskType.READ_CSV, TaskType.READ_CSV).setHasArgs().setMinArgs(1).setMaxArgs(1).build());</span>
+<span class="fc" id="L59">            put(TaskType.ADD_TODO.keyword(), new CommandLineOption.Builder(TaskType.ADD_TODO, TaskType.ADD_TODO).build());</span>
+<span class="fc" id="L60">            put(TaskType.ADD_TODO_TEXT.keyword(), new CommandLineOption.Builder(TaskType.ADD_TODO, TaskType.ADD_TODO_TEXT).setHasArgs().setMinArgs(1).build());</span>
+<span class="fc" id="L61">            put(TaskType.COMPLETED.keyword(), new CommandLineOption.Builder(TaskType.ADD_TODO, TaskType.COMPLETED).build());</span>
+<span class="fc" id="L62">            put(TaskType.ADD_DUE.keyword(), new CommandLineOption.Builder(TaskType.ADD_TODO, TaskType.ADD_DUE).setHasArgs().setMinArgs(1).setMaxArgs(1).build());</span>
+<span class="fc" id="L63">            put(TaskType.ADD_PRIORITY.keyword(), new CommandLineOption.Builder(TaskType.ADD_TODO, TaskType.ADD_PRIORITY).setHasArgs().setMinArgs(1).setMaxArgs(1).build());</span>
+<span class="fc" id="L64">            put(TaskType.ADD_CATEGORY.keyword(), new CommandLineOption.Builder(TaskType.ADD_TODO, TaskType.ADD_CATEGORY).setHasArgs().setMinArgs(1).setMaxArgs(1).build());</span>
+<span class="fc" id="L65">            put(TaskType.COMPLETE_TODO.keyword(), new CommandLineOption.Builder(TaskType.COMPLETE_TODO, TaskType.COMPLETE_TODO).setHasArgs().setMinArgs(1).setMaxArgs(1).build());</span>
+<span class="fc" id="L66">            put(TaskType.DISPLAY.keyword(), new CommandLineOption.Builder(TaskType.DISPLAY, TaskType.DISPLAY).build());</span>
+<span class="fc" id="L67">            put(TaskType.SHOW_INCOMPLETE.keyword(), new CommandLineOption.Builder(TaskType.DISPLAY, TaskType.SHOW_INCOMPLETE).build());</span>
+<span class="fc" id="L68">            put(TaskType.SHOW_CATEGORY.keyword(), new CommandLineOption.Builder(TaskType.DISPLAY, TaskType.SHOW_CATEGORY).setHasArgs().setMinArgs(1).setMaxArgs(1).build());</span>
+<span class="fc" id="L69">            put(TaskType.SORT_BY_DATE.keyword(),  new CommandLineOption.Builder(TaskType.DISPLAY, TaskType.SORT_BY_DATE).build());</span>
+<span class="fc" id="L70">            put(TaskType.SORT_BY_PRIORITY.keyword(),  new CommandLineOption.Builder(TaskType.DISPLAY, TaskType.SORT_BY_PRIORITY).build());</span>
+<span class="fc" id="L71">        }</span>
+    };
+
+    /**
+     * Includes all required main task for the application.
+     */
+<span class="fc" id="L77">    protected static final Set&lt;TaskType&gt; requiredTasks = new HashSet&lt;TaskType&gt;(){{ add(TaskType.READ_CSV); }};</span>
+
+    /**
+     * Includes all required (sub)tasks for main tasks
+     */
+<span class="fc" id="L82">    protected static final Map&lt;TaskType, Set&lt;TaskType&gt;&gt; requiredSubForEachMain = new HashMap&lt;TaskType, Set&lt;TaskType&gt;&gt;(){</span>
+        {
+<span class="fc" id="L84">            put(TaskType.READ_CSV, new HashSet&lt;&gt;());</span>
+<span class="fc" id="L85">            put(TaskType.ADD_TODO, new HashSet&lt;&gt;(Arrays.asList(TaskType.ADD_TODO, TaskType.ADD_TODO_TEXT)));</span>
+<span class="fc" id="L86">            put(TaskType.COMPLETE_TODO, new HashSet&lt;&gt;());</span>
+<span class="fc" id="L87">            put(TaskType.DISPLAY, new HashSet&lt;&gt;(Arrays.asList(TaskType.DISPLAY)));</span>
+<span class="fc" id="L88">            put(TaskType.WRITE_CSV, new HashSet&lt;&gt;());</span>
+<span class="fc" id="L89">        }</span>
+    };
+
+    /**
+     * Maps between the main tasks and their processing priority for the application
+     */
+<span class="fc" id="L95">    protected static final Map&lt;TaskType, Integer&gt; taskPriority = new HashMap&lt;TaskType, Integer&gt;(){</span>
+        {
+<span class="fc" id="L97">            put(TaskType.READ_CSV, 1);</span>
+<span class="fc" id="L98">            put(TaskType.ADD_TODO, 2);</span>
+<span class="fc" id="L99">            put(TaskType.COMPLETE_TODO, 3);</span>
+<span class="fc" id="L100">            put(TaskType.DISPLAY, 4);</span>
+<span class="fc" id="L101">            put(TaskType.WRITE_CSV, 5);</span>
+<span class="fc" id="L102">        }</span>
+    };
+
+    /**
+     * Maps between the default header and the default column index
+     */
+<span class="fc" id="L108">    protected static final Map&lt;String, Integer&gt; DEFAULT_HEADERS = new HashMap&lt;String, Integer&gt;(){</span>
+        {
+<span class="fc" id="L110">            put(&quot;id&quot;, 0);</span>
+<span class="fc" id="L111">            put(&quot;text&quot;, 1);</span>
+<span class="fc" id="L112">            put(&quot;completed&quot;, 2);</span>
+<span class="fc" id="L113">            put(&quot;due&quot;, 3);</span>
+<span class="fc" id="L114">            put(&quot;priority&quot;, 4);</span>
+<span class="fc" id="L115">            put(&quot;category&quot;, 5);</span>
+<span class="fc" id="L116">        }</span>
+    };
+
+
+    /**
+     * The mapping of TaskType and usage message
+     */
+<span class="fc" id="L123">    protected static final Map&lt;TaskType, String[]&gt; usage = new LinkedHashMap&lt;TaskType, String[]&gt;(){</span>
+        {
+<span class="fc" id="L125">            put(TaskType.READ_CSV,</span>
+<span class="fc" id="L126">                new String[]{TaskType.READ_CSV.keyword() + &quot; &lt;path/to/file&gt;&quot;, &quot;The CSV file containing the todos. This option is required.&quot;});</span>
+<span class="fc" id="L127">            put(TaskType.ADD_TODO,</span>
+<span class="fc" id="L128">                new String[]{TaskType.ADD_TODO.keyword(), &quot;Add a new todo. If this option is provided, then --todo-text must also be provided.&quot;});</span>
+<span class="fc" id="L129">            put(TaskType.ADD_TODO_TEXT,</span>
+<span class="fc" id="L130">                new String[]{TaskType.ADD_TODO.keyword()+ &quot; &lt;description of todo&gt;&quot;, &quot;A description of the todo.&quot;});</span>
+<span class="fc" id="L131">            put(TaskType.COMPLETED,</span>
+<span class="fc" id="L132">                new String[]{TaskType.COMPLETE_TODO.keyword(), &quot;(Optional) Sets the completed status of a new todo to true.&quot;});</span>
+<span class="fc" id="L133">            put(TaskType.ADD_DUE,</span>
+<span class="fc" id="L134">                new String[]{TaskType.ADD_DUE.keyword() + &quot; &lt;due date&gt;&quot;, &quot;(Optional) Sets the due date of a new todo. Due date should be in M/dd/YYYY format.&quot;});</span>
+<span class="fc" id="L135">            put(TaskType.ADD_PRIORITY,</span>
+<span class="fc" id="L136">                new String[]{TaskType.ADD_PRIORITY.keyword() + &quot; &lt;1, 2, or 3&gt;&quot;, &quot;(Optional) Sets the priority of a new todo. The value can be 1, 2, or 3.&quot;});</span>
+<span class="fc" id="L137">            put(TaskType.ADD_CATEGORY,</span>
+<span class="fc" id="L138">                new String[]{TaskType.ADD_CATEGORY.keyword() + &quot; &lt;a category name&gt;&quot;, &quot;(Optional) Sets the category of a new todo.&quot;});</span>
+<span class="fc" id="L139">            put(TaskType.COMPLETE_TODO,</span>
+<span class="fc" id="L140">                new String[]{TaskType.COMPLETE_TODO.keyword() + &quot; &lt;id&gt;&quot;, &quot;Mark the Todo with the provided ID as complete.&quot;});</span>
+<span class="fc" id="L141">            put(TaskType.DISPLAY,</span>
+<span class="fc" id="L142">                new String[]{TaskType.DISPLAY.keyword(), &quot;Display todos. If none of the following optional arguments are provided, displays all todos.&quot;});</span>
+<span class="fc" id="L143">            put(TaskType.SHOW_INCOMPLETE,</span>
+<span class="fc" id="L144">                new String[]{TaskType.SHOW_INCOMPLETE.keyword(), &quot;(Optional) If --display is provided, only incomplete todos should be displayed.&quot;});</span>
+<span class="fc" id="L145">            put(TaskType.SHOW_CATEGORY,</span>
+<span class="fc" id="L146">                new String[]{TaskType.SHOW_CATEGORY.keyword() + &quot; &lt;category&gt;&quot;,  &quot;(Optional) If --display is provided, only todos with the given category should be displayed.&quot;});</span>
+<span class="fc" id="L147">            put(TaskType.SORT_BY_DATE,</span>
+<span class="fc" id="L148">                new String[]{TaskType.SORT_BY_DATE.keyword(), &quot;(Optional) If --display is provided, sort the list of by date order (ascending). Cannot be combined with --sort-by-priority.&quot;});</span>
+<span class="fc" id="L149">            put(TaskType.SORT_BY_PRIORITY,</span>
+<span class="fc" id="L150">                new String[]{TaskType.SORT_BY_PRIORITY.keyword(), &quot;(Optional) If --display is provided, sort the list of todos by priority (ascending). Cannot be combined with --sort-by-date.&quot;});</span>
+<span class="fc" id="L151">        }</span>
+    };
+
+    /**
+     * The mapping of Main task's TaskType and usage message
+     */
+<span class="fc" id="L157">    protected static final Map&lt;TaskType, List&lt;String[]&gt;&gt; mainUsage = new LinkedHashMap&lt;TaskType, List&lt;String[]&gt;&gt;(){</span>
+        {
+<span class="fc" id="L159">            List&lt;String[]&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L160">            list.add(usage.get(TaskType.READ_CSV));</span>
+<span class="fc" id="L161">            put(TaskType.READ_CSV, list);</span>
+
+<span class="fc" id="L163">            list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L164">            list.add(usage.get(TaskType.ADD_TODO));</span>
+<span class="fc" id="L165">            list.add(usage.get(TaskType.ADD_TODO_TEXT));</span>
+<span class="fc" id="L166">            list.add(usage.get(TaskType.COMPLETED));</span>
+<span class="fc" id="L167">            list.add(usage.get(TaskType.ADD_DUE));</span>
+<span class="fc" id="L168">            list.add(usage.get(TaskType.ADD_PRIORITY));</span>
+<span class="fc" id="L169">            list.add(usage.get(TaskType.ADD_CATEGORY));</span>
+<span class="fc" id="L170">            put(TaskType.ADD_TODO, list);</span>
+
+<span class="fc" id="L172">            list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L173">            list.add(usage.get(TaskType.COMPLETE_TODO));</span>
+<span class="fc" id="L174">            put(TaskType.COMPLETE_TODO, list);</span>
+
+<span class="fc" id="L176">            list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L177">            list.add(usage.get(TaskType.DISPLAY));</span>
+<span class="fc" id="L178">            list.add(usage.get(TaskType.SHOW_INCOMPLETE));</span>
+<span class="fc" id="L179">            list.add(usage.get(TaskType.SHOW_CATEGORY));</span>
+<span class="fc" id="L180">            list.add(usage.get(TaskType.SORT_BY_DATE));</span>
+<span class="fc" id="L181">            list.add(usage.get(TaskType.SORT_BY_PRIORITY));</span>
+<span class="fc" id="L182">            put(TaskType.DISPLAY, list);</span>
+<span class="fc" id="L183">         }</span>
+    };
+    
+    /**
+     * An example of valid command line arguments
+     */
+<span class="fc" id="L189">    protected static final List&lt;String[]&gt; examples = Arrays.asList(</span>
+<span class="fc" id="L190">        new String[]{TaskType.READ_CSV.keyword(), &quot;todos.csv&quot;, TaskType.DISPLAY.keyword()},</span>
+<span class="fc" id="L191">        new String[]{TaskType.READ_CSV.keyword(), &quot;todos.csv&quot;,</span>
+<span class="fc" id="L192">        TaskType.ADD_TODO.keyword(), TaskType.ADD_TODO_TEXT.keyword(), &quot;write&quot;, &quot;letter&quot;, &quot;to&quot;, &quot;Jane&quot;, &quot;and&quot;, &quot;call&quot;, &quot;Bob&quot;,</span>
+<span class="fc" id="L193">        TaskType.ADD_PRIORITY.keyword(), &quot;2&quot;, TaskType.ADD_CATEGORY.keyword(), &quot;personal&quot;,</span>
+<span class="fc" id="L194">        TaskType.COMPLETE_TODO.keyword(), &quot;1&quot;,</span>
+<span class="fc" id="L195">        TaskType.DISPLAY.keyword(), TaskType.SORT_BY_DATE.keyword(), TaskType.SHOW_INCOMPLETE.keyword()}</span>
+        );
+
+    /**
+     * Get the map of command setting
+     * @return the command setting as a mapping of string and CommandLineOption Object
+     */
+    public static Map&lt;String, CommandLineOption&gt; getCommandSettings() {
+<span class="nc" id="L203">        return commandSettings;</span>
+    }
+
+    /**
+     * Get the required tasks for the application
+     * @return the required tasks for the application as a set of TaskType
+     */
+    public static Set&lt;TaskType&gt; getRequiredTasks() {
+<span class="nc" id="L211">        return requiredTasks;</span>
+    }
+
+    /**
+     * Get the mapping of required (sub)tasks for main tasks
+     * @return the required subtasks for main tasks as a mapping of TaskType and Set of TaskTypes
+     */
+    public static Map&lt;TaskType, Set&lt;TaskType&gt;&gt; getRequiredSubForEachMain() {
+<span class="fc" id="L219">        return requiredSubForEachMain;</span>
+    }
+
+    /**
+     * Get the task priority
+     * @return the task priority as a mapping of TaskType and Integer
+     */
+    public static Map&lt;TaskType, Integer&gt; getTaskPriority() {
+<span class="nc" id="L227">        return taskPriority;</span>
+    }
+
+    /**
+     * Get the default header
+     * @return the default header as a mapping of string and integer
+     */
+    public static Map&lt;String, Integer&gt; getDefaultHeaders() {
+<span class="fc" id="L235">        return DEFAULT_HEADERS;</span>
+    }
+
+    /**
+     * Get the usage examples
+     * @return the usage examples as a list of string[]
+     */
+    public static List&lt;String[]&gt; getExamples() {
+<span class="nc" id="L243">        return examples;</span>
+    }
+
+    /**
+     * Get usage message of specific TaskType t
+     * @param t the given taskType t
+     * @return the usage message as a String[]
+     */
+    public static List&lt;String[]&gt; getMainUsage(TaskType t) {
+<span class="nc" id="L252">        return mainUsage.get(t);</span>
+    }
+
+    /**
+     * Get all usage message
+     * @return all usage message as a List of String[]
+     */
+    public static List&lt;String[]&gt; getAllUsage(){
+<span class="nc" id="L260">        List&lt;String[]&gt; allUsage = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        for(TaskType t: usage.keySet()){</span>
+<span class="nc" id="L262">            allUsage.add(usage.get(t));</span>
+<span class="nc" id="L263">        }</span>
+<span class="nc" id="L264">        return allUsage;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

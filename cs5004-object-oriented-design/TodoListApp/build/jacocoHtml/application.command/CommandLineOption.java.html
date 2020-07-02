@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommandLineOption.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.command</a> &gt; <span class="el_source">CommandLineOption.java</span></div><h1>CommandLineOption.java</h1><pre class="source lang-java linenums">package application.command;
+
+import application.model.UserSetting.TaskType;
+
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * Represents a CommandLineOption class with a number of default/optional parameters. Uses the builder pattern to handle
+ * construction.
+ */
+public class CommandLineOption {
+  private static final boolean DEFAULT_HAS_ARGS = false;
+  private static final int MIN_NUM_ARGS = 0;
+  private static final int MAX_NUM_ARGS = 30;
+  private TaskType mainTask;
+  private TaskType name;
+  private boolean hasArgs;
+  private List&lt;String&gt; args;
+  private int minArgs;
+  private int maxArgs;
+
+  /**
+   * builder pattern to handle
+   * construction.
+   * @param builder builder pattern
+   */
+<span class="fc" id="L28">  private CommandLineOption(Builder builder){</span>
+<span class="fc" id="L29">    this.mainTask = builder.mainTask;</span>
+<span class="fc" id="L30">    this.name = builder.name;</span>
+<span class="fc" id="L31">    this.hasArgs = builder.hasArgs;</span>
+<span class="fc" id="L32">    this.minArgs = builder.minArgs;</span>
+<span class="fc" id="L33">    this.maxArgs = builder.maxArgs;</span>
+<span class="fc" id="L34">  }</span>
+
+  /**
+   * Check whether it has sub arguments
+   * @return true if it has, otherwise false
+   */
+  public boolean hasSubArgs() {
+<span class="fc" id="L41">    return this.hasArgs;</span>
+  }
+
+  /**
+   * Get the type of the main task
+   * @return main taks
+   */
+  public TaskType getMainTask() {
+<span class="fc" id="L49">    return this.mainTask;</span>
+  }
+
+  /**
+   * Get the type of the sub task
+   * @return the name of sub task
+   */
+<span class="fc" id="L56">  public TaskType getName() { return this.name; }</span>
+
+  /**
+   * Get the list of arguments
+   * @return the list of arguments
+   */
+  public List&lt;String&gt; getArgs() {
+<span class="fc" id="L63">    return this.args;</span>
+  }
+
+  /**
+   * Set the args
+   * @param args list of args
+   * @throws InvalidCommandException throw exception if the args are invalid
+   */
+  public void setArgs(List&lt;String&gt; args) throws InvalidCommandException{
+<span class="fc" id="L72">    this.validateNumOfArgs(args);</span>
+<span class="fc" id="L73">    this.args = args;</span>
+<span class="fc" id="L74">  }</span>
+
+  /**
+   * Helper function to check whether the number of args are valid or not
+   * @param args the list of args
+   * @throws InvalidCommandException throw an exception if it is invalid
+   */
+  private void validateNumOfArgs(List&lt;String&gt; args) throws InvalidCommandException{
+<span class="fc bfc" id="L82" title="All 4 branches covered.">    if (args.size() &lt; this.minArgs || args.size() &gt; this.maxArgs){</span>
+<span class="fc" id="L83">      throw new InvalidCommandException(&quot;Number of arguments under &quot; + this.name.keyword() + &quot; command is not within the required range.&quot;);</span>
+    }
+<span class="fc" id="L85">  }</span>
+
+  /**
+   * Builder pattern class
+   */
+  public static class Builder {
+    private TaskType mainTask;
+    private TaskType name;
+    private boolean hasArgs;
+    private List&lt;String&gt; args;
+    private int minArgs;
+    private int maxArgs;
+
+    /**
+     * Builder constructor which contains necessary parameters
+     * @param mainTask mainTask
+     * @param name name
+     */
+<span class="fc" id="L103">    public Builder(TaskType mainTask, TaskType name) {</span>
+<span class="fc" id="L104">      this.mainTask = mainTask;</span>
+<span class="fc" id="L105">      this.name = name;</span>
+<span class="fc" id="L106">      this.hasArgs = DEFAULT_HAS_ARGS;</span>
+<span class="fc" id="L107">      this.minArgs = MIN_NUM_ARGS;</span>
+<span class="fc" id="L108">      this.maxArgs = MAX_NUM_ARGS;</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Set hasArgs parameter in builder pattern
+     * @return Builder with the hasArgs parameter
+     */
+    public Builder setHasArgs() {
+<span class="fc" id="L116">      this.hasArgs = true;</span>
+<span class="fc" id="L117">      return this;</span>
+    }
+
+    /**
+     * Set MinArgs parameter in builder pattern
+     * @param minArgs the number of min args
+     * @return Builder with the MinArgs parameter
+     */
+    public Builder setMinArgs(int minArgs){
+<span class="fc" id="L126">      this.minArgs = minArgs;</span>
+<span class="fc" id="L127">      return this;</span>
+    }
+
+    /**
+     * Set MaxArgs parameter in builder pattern
+     * @param maxArgs the number of MaxArgs
+     * @return Builder with the MaxArgs parameter
+     */
+    public Builder setMaxArgs(int maxArgs){
+<span class="fc" id="L136">      this.maxArgs = maxArgs;</span>
+<span class="fc" id="L137">      return this;</span>
+    }
+
+    /**
+     * Build method
+     * @return a CommandLineOption object
+     */
+    public CommandLineOption build(){
+<span class="fc" id="L145">      return new CommandLineOption(this);</span>
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+<span class="fc bfc" id="L151" title="All 2 branches covered.">    if (this == o) return true;</span>
+<span class="fc bfc" id="L152" title="All 4 branches covered.">    if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L153">    CommandLineOption that = (CommandLineOption) o;</span>
+<span class="fc bfc" id="L154" title="All 6 branches covered.">    return hasArgs == that.hasArgs &amp;&amp;</span>
+            minArgs == that.minArgs &amp;&amp;
+            maxArgs == that.maxArgs &amp;&amp;
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            getMainTask() == that.getMainTask() &amp;&amp;</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            getName() == that.getName() &amp;&amp;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            Objects.equals(getArgs(), that.getArgs());</span>
+  }
+
+  @Override
+  public int hashCode() {
+<span class="fc" id="L164">    return Objects.hash(getMainTask(), getName(), hasArgs, getArgs(), minArgs, maxArgs);</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="fc" id="L169">    return &quot;CommandLineOption{&quot; +</span>
+            &quot;mainTask=&quot; + mainTask +
+            &quot;, name=&quot; + name +
+            &quot;, hasArgs=&quot; + hasArgs +
+            &quot;, args=&quot; + args +
+            &quot;, minArgs=&quot; + minArgs +
+            &quot;, maxArgs=&quot; + maxArgs +
+            '}';
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

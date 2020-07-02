@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadCSV.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">HW09</a> &gt; <a href="index.source.html" class="el_package">application.task</a> &gt; <span class="el_source">ReadCSV.java</span></div><h1>ReadCSV.java</h1><pre class="source lang-java linenums">package application.task;
+
+import application.command.CommandLineOption;
+import application.command.InvalidCommandException;
+import application.fileIO.CsvDataReader;
+import application.model.*;
+
+import java.util.*;
+
+/**
+ * Represents a ReadCSV class that extends AbstractMainTask
+ */
+public class ReadCSV extends AbstractMainTask {
+    /**
+     * The path of file to be read
+     */
+    protected String path;
+
+    /**
+     * Constructs a new ReadCSV
+     * @param name name of the MainTask
+     * @param order Order of this MainTask to be executed
+     * @param todoList TodoList to be modified
+     * @param commands Commands assigned to this MainTask
+     * @param requiredSubTasks Required SubTasks for this MainTask
+     */
+    public ReadCSV(UserSetting.TaskType name, int order, ITodoList todoList, List&lt;CommandLineOption&gt; commands, Set&lt;UserSetting.TaskType&gt; requiredSubTasks) {
+<span class="fc" id="L28">        super(name, order, todoList, commands, requiredSubTasks);</span>
+<span class="fc" id="L29">        path = &quot;&quot;;</span>
+<span class="fc" id="L30">    }</span>
+
+    /**
+     * Assign commands to each SubTask and push SubTask into a TaskList for execution
+     * @throws InvalidCommandException thrown if an error occurs when assigning commands
+     */
+    @Override
+    public void assignCommands() throws InvalidCommandException {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (CommandLineOption c : this.commands){</span>
+<span class="fc" id="L39">            AbstractSubTask sub = this.createSubTask(c);</span>
+<span class="fc" id="L40">            this.collectedSubTasks.add(sub);</span>
+<span class="fc" id="L41">        }</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Assigns commands to SubTasks, verifies all required SubTasks and executes all SubTasks
+     * @throws Exception throws if an error occurs when executing
+     */
+    @Override
+    public void execute() throws Exception {
+<span class="fc" id="L50">        this.assignCommands();</span>
+<span class="fc" id="L51">        super.verifyRequiredSubTask();</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for(AbstractSubTask t : this.collectedSubTasks){ t.execute(); }</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Creates and returns a SubTask given a CommandLineOption
+     * @param c CommandLineOption given
+     * @return a SubTask
+     * @throws InvalidCommandException thrown if an error occurs when creating SubTask
+     */
+    @Override
+    public AbstractSubTask createSubTask(CommandLineOption c) throws InvalidCommandException {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        switch(c.getName()){</span>
+<span class="fc" id="L64">            case READ_CSV: return new LoadCSV(c.getName(), c.getArgs());</span>
+            default:
+<span class="fc" id="L66">                throw new InvalidCommandException(&quot;Unknown command: &quot; + c.getName());</span>
+        }
+    }
+
+    /**
+     * Represents a LoadCSV class that extends AbstractSubTask
+     */
+    private class LoadCSV extends AbstractSubTask{
+
+        /**
+         * Constructs LoadCSV
+         * @param name TaskType name
+         * @param args List&lt;String&gt; args
+         */
+<span class="fc" id="L80">        public LoadCSV(UserSetting.TaskType name, List&lt;String&gt; args) {</span>
+<span class="fc" id="L81">            super(name, args);</span>
+<span class="fc" id="L82">        }</span>
+
+        /**
+         * Execute LoadCSV
+         * @throws Exception thrown if an error occurs when executing LoadCSV
+         */
+        @Override
+        public void execute() throws Exception {
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            if (todoList == null) {</span>
+<span class="fc" id="L91">                throw new IllegalArgumentException(&quot;Get nothing&quot;);</span>
+            }
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (todoList.size() != 0) {</span>
+<span class="fc" id="L94">                throw new IllegalArgumentException(&quot;Need to start with an empty todolist&quot;);</span>
+            }
+
+<span class="fc" id="L97">            path = args.get(0);</span>
+<span class="fc" id="L98">            CsvDataReader inputCsv = new CsvDataReader();</span>
+<span class="fc" id="L99">            inputCsv.read(path);</span>
+
+<span class="fc" id="L101">            Map&lt;String, Integer&gt; collectedHeaders = processHeaders(inputCsv.getHeader());</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">            for (List&lt;String&gt; row : inputCsv.getContents()) {</span>
+<span class="fc" id="L103">                todoList.addTodo(StringToFieldConverter.processTodo(row, collectedHeaders));</span>
+<span class="fc" id="L104">            }</span>
+<span class="fc" id="L105">        }</span>
+
+        /**
+         * Matches the fields and their positions in the headers collected from CSV file
+         * @param headers headers collected from CSV file
+         * @return A mapping of field's name and its position in the collected headers
+         * @throws InvalidHeaderException thrown if an error occurs when processing the headers
+         */
+        private Map&lt;String, Integer&gt; processHeaders(List&lt;String&gt; headers) throws InvalidHeaderException{
+<span class="fc" id="L114">            Map&lt;String, Integer&gt; collectedHeaders = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            for(int i = 0; i &lt; headers.size(); i++){</span>
+<span class="fc" id="L116">                String header = headers.get(i);</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">                if(!UserSetting.getDefaultHeaders().containsKey(header)){ throw new InvalidHeaderException(header + &quot; is not a valid field of Todo.&quot;); }</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">                if(collectedHeaders.containsKey(header)){ throw new InvalidHeaderException(&quot;Contains duplicated header &quot; + header + &quot; in this CSV file.&quot;);}</span>
+<span class="fc" id="L119">                collectedHeaders.put(header, i);</span>
+            }
+<span class="fc" id="L121">            return collectedHeaders;</span>
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="fc bfc" id="L128" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (!super.equals(o)) return false;</span>
+<span class="fc" id="L130">        ReadCSV readCSV = (ReadCSV) o;</span>
+<span class="fc" id="L131">        return path.equals(readCSV.path);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L136">        return Objects.hash(super.hashCode(), path);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L141">        return &quot;ReadCSV{&quot; +</span>
+                &quot;path='&quot; + path + '\'' +
+<span class="fc" id="L143">                &quot;} &quot; + super.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
